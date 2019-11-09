@@ -4,8 +4,8 @@
 * https://www.youtube.com/watch?v=IwJ-SCfXoAU
 * reduce takes identity value not initial value (41.40)
 * 54.12 - size of common pool, 55.49 - main is actually a part of it
-* `-Djava.util.concurrent.ForkJoinPool.common.parallelism=100`
-* own pool: 1.05.28
+* `-Djava.util.concurrent.ForkJoinPool.common.parallelism=100` // try to avoid it
+* https://stackoverflow.com/questions/24308146/why-is-a-combiner-needed-for-reduce-method-that-converts-type-in-java-8
 
 *     T result = identity;
 *     for (T element : this stream)
