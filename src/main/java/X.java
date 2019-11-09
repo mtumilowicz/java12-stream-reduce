@@ -30,6 +30,7 @@ public class X {
     }
 
     // check on parallel stream where are executed
+    // it doesn't really matter where you create the stream but where you invoke terminal operation
     static void process(Stream<Integer> stream) throws InterruptedException {
         ForkJoinPool fjp = new ForkJoinPool(50);
 
