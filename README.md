@@ -1,11 +1,16 @@
 # java12-stream-reduce
 
-https://www.youtube.com/watch?v=IwJ-SCfXoAU
+* https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/stream/package-summary.html
+* https://www.youtube.com/watch?v=IwJ-SCfXoAU
 * reduce takes identity value not initial value (41.40)
 * 54.12 - size of common pool, 55.49 - main is actually a part of it
 * -Djava.util.concurrent.ForkJoinPool.common.parallelism=100
 * own pool: 1.05.28
 
+*     T result = identity;
+*     for (T element : this stream)
+*         result = accumulator.apply(result, element)
+*     return result;
 * The identity value must be an identity for the accumulator
 * function. This means that for all t,
 * accumulator.apply(identity, t) is equal to t.
@@ -14,6 +19,17 @@ https://www.youtube.com/watch?v=IwJ-SCfXoAU
 * T reduce(T identity, BinaryOperator<T> accumulator);
 
 
+*     boolean foundAny = false;
+*     T result = null;
+*     for (T element : this stream) {
+*         if (!foundAny) {
+*             foundAny = true;
+*             result = element;
+*         }
+*         else
+*             result = accumulator.apply(result, element);
+*     }
+*     return foundAny ? Optional.of(result) : Optional.empty();
 * @param accumulator an <a href="package-summary.html#Associativity">associative</a>,
 *                    <a href="package-summary.html#NonInterference">non-interfering</a>,
 *                    <a href="package-summary.html#Statelessness">stateless</a>
@@ -34,3 +50,16 @@ https://www.youtube.com/watch?v=IwJ-SCfXoAU
 *                    function for combining two values, which must be
 *                    compatible with the accumulator function
 * `<U> U reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner);`
+
+```
+list.stream().reduce(identity,
+                     accumulator,
+                     combiner);
+```
+Produces the same results as:
+
+```
+list.stream().map(i -> accumulator(identity, i))
+             .reduce(identity,
+                     combiner);
+```
