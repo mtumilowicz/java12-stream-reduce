@@ -27,19 +27,9 @@ on any state which might change during the execution of the stream pipeline
 * the best approach is to avoid stateful behavioral parameters to stream operations entirely; there is usually a way 
 to restructure the stream pipeline to avoid statefulness
 
-*     T result = identity;
-*     for (T element : this stream)
-*         result = accumulator.apply(result, element)
-*     return result;
-* The identity value must be an identity for the accumulator
-* function. This means that for all t,
-* accumulator.apply(identity, t) is equal to t.
-* The accumulator function must be an
-* associative function.
-* T reduce(T identity, BinaryOperator<T> accumulator);
-
-* accumulator an associative, non-interfering, stateless function for combining two values
-* `Optional<T> reduce(BinaryOperator<T> accumulator);`
+# reduce
+* accumulator have to be an associative, non-interfering, stateless function for combining two values
+1. `Optional<T> reduce(BinaryOperator<T> accumulator);`
     * equivalent to
         ```
         boolean foundAny = false;
@@ -54,6 +44,16 @@ to restructure the stream pipeline to avoid statefulness
         }
         return foundAny ? Optional.of(result) : Optional.empty();
         ```
+1. `T reduce(T identity, BinaryOperator<T> accumulator);`
+    * equivalent to
+        ```
+        T result = identity;
+        for (T element : this stream)
+            result = accumulator.apply(result, element)
+        return result;
+        ```
+    * identity value must be an identity for the accumulator function. This means that for all t,
+        `accumulator.apply(identity, t) is equal to t` for all `t`
 
 * Additionally, the combiner function
 * must be compatible with the accumulator function; for all
@@ -63,11 +63,6 @@ to restructure the stream pipeline to avoid statefulness
 * Many reductions using this form can be represented more simply
 * by an explicit combination of {@code map} and {@code reduce} operations.
 
-* @param combiner an <a href="package-summary.html#Associativity">associative</a>,
-*                    <a href="package-summary.html#NonInterference">non-interfering</a>,
-*                    <a href="package-summary.html#Statelessness">stateless</a>
-*                    function for combining two values, which must be
-*                    compatible with the accumulator function
 * `<U> U reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner);`
 
 ```
