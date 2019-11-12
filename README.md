@@ -2,12 +2,10 @@
 
 * https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/stream/package-summary.html
 * https://www.youtube.com/watch?v=IwJ-SCfXoAU
-* reduce takes identity value not initial value (41.40)
-* 54.12 - size of common pool, 55.49 - main is actually a part of it
-* `-Djava.util.concurrent.ForkJoinPool.common.parallelism=100` // try to avoid it
 * https://stackoverflow.com/questions/24308146/why-is-a-combiner-needed-for-reduce-method-that-converts-type-in-java-8
 
-# Associativity
+## preface
+### Associativity
 * an operator or function op is associative if the following holds:
     * `(a op b) op c == a op (b op c)`
 the importance of this to parallel evaluation can be seen if we expand this to four terms:
@@ -15,20 +13,20 @@ the importance of this to parallel evaluation can be seen if we expand this to f
      * so we can evaluate `(a op b)` in parallel with `(c op d)`, and then invoke op on the results
 * examples of associative operations include numeric addition, min, and max, and string concatenation.
 
-# Non-interference
+### Non-interference
 * for most data sources, preventing interference means ensuring that the data source is not modified at all during 
 the execution of the stream pipeline
 * the notable exception to this are streams whose sources are concurrent collections, which are specifically 
 designed to handle concurrent modification
 
-# statelessness
+### statelessness
 * a stateful lambda (or other object implementing the appropriate functional interface) is one whose result depends 
 on any state which might change during the execution of the stream pipeline
 * the best approach is to avoid stateful behavioral parameters to stream operations entirely; there is usually a way 
 to restructure the stream pipeline to avoid statefulness
 
-# reduce
-* accumulator have to be an associative, non-interfering, stateless function for combining two values
+## reduce
+* accumulator have to be an **associative**, **non-interfering**, **stateless** function for combining two values
 1. `Optional<T> reduce(BinaryOperator<T> accumulator);`
     * equivalent to
         ```
