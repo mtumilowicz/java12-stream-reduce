@@ -54,26 +54,19 @@ to restructure the stream pipeline to avoid statefulness
         ```
     * identity value must be an identity for the accumulator function. This means that for all t,
         `accumulator.apply(identity, t) is equal to t` for all `t`
-
-* Additionally, the combiner function
-* must be compatible with the accumulator function; for all
-* u and t, the following must hold: 
-* combiner.apply(u, accumulator.apply(identity, t)) == accumulator.apply(u, t)
-
-* Many reductions using this form can be represented more simply
-* by an explicit combination of {@code map} and {@code reduce} operations.
-
-* `<U> U reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner);`
-
-```
-list.stream().reduce(identity,
-                     accumulator,
-                     combiner);
-```
-Produces the same results as:
-
-```
-list.stream().map(i -> accumulator(identity, i))
-             .reduce(identity,
-                     combiner);
-```
+1. `<U> U reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner);`
+    * combiner function must be compatible with the accumulator function
+        `combiner.apply(u, accumulator.apply(identity, t)) == accumulator.apply(u, t)` for all `u` and `t`
+    * many reductions using this form can be represented more simply by an explicit combination of `map` 
+    and `reduce` operations
+        ```
+        list.stream().reduce(identity,
+                             accumulator,
+                             combiner);
+        ```
+        produces the same results as:
+        ```
+        list.stream().map(i -> accumulator(identity, i))
+                     .reduce(identity,
+                             combiner);
+        ```
