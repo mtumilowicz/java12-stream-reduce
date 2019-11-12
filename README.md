@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/mtumilowicz/java12-stream-reduce.svg?branch=master)](https://travis-ci.com/mtumilowicz/java12-stream-reduce)
 # java12-stream-reduce
 
 * https://docs.oracle.com/en/java/javase/13/docs/api/java.base/java/util/stream/package-summary.html
