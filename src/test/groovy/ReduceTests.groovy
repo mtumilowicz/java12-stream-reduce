@@ -1,10 +1,5 @@
 import spock.lang.Specification
 
-import java.util.concurrent.ForkJoinPool
-
-/**
- * Created by mtumilowicz on 2019-07-30.
- */
 class ReduceTests extends Specification {
 
     def "parallel non identity value"() {
