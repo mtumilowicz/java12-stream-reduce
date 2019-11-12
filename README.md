@@ -51,18 +51,52 @@ stream pipeline
     * identity value must be an identity for the accumulator function. This means that for all t,
         `accumulator.apply(identity, t) is equal to t` for all `t`
 1. `<U> U reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner);`
+    * note that with other two implementations of `reduce` there is no possibility to return other type
+    than stream type (eg. if you are reducing stream of integers with other two implementations the reduced value
+     is also an integer)
     * combiner function must be compatible with the accumulator function
         `combiner.apply(u, accumulator.apply(identity, t)) == accumulator.apply(u, t)` for all `u` and `t`
     * many reductions using this form can be represented more simply by an explicit combination of `map` 
     and `reduce` operations
         ```
-        list.stream().reduce(identity,
-                             accumulator,
-                             combiner);
+        list.stream().reduce(identity, accumulator, combiner);
         ```
         produces the same results as:
         ```
-        list.stream().map(i -> accumulator(identity, i))
-                     .reduce(identity,
-                             combiner);
+        list.stream().map(i -> accumulator(identity, i)) .reduce(identity, combiner);
         ```
+## project description
+1. non identity value in parallel streams
+    ```
+    given:
+    def ints = 1..10
+
+    expect:
+    ints.stream().reduce(0, { a, b -> a + b }) == 55
+    ints.stream().reduce(20, { a, b -> a + b }) == 75 // possibly true, but not guarantee by specification
+    ints.stream().parallel().reduce(20, { a, b -> a + b }) != 75 // 20 is not an identity value
+    ```
+1. reduce with combiner
+    ```
+    given:
+    def letters = ['a', 'b', 'c']
+
+    when:
+    def initial = new StringBuilder()
+    def accumulator = { stringBuilder, string -> stringBuilder + string }
+    def combiner = { stringBuilder1, stringBuilder2 -> stringBuilder1 + stringBuilder2 }
+
+    then:
+    letters.stream().reduce(initial, accumulator, combiner).toString() == 'abc'
+    ```
+1. note that above example with `combiner` could be easily represent as a `map` + ordinary `reduce`
+    ```
+    given:
+    def letters = ['a', 'b', 'c']
+    
+    expect:
+    letters.stream()
+            .map { new StringBuilder(it) }
+            .reduce(new StringBuilder(), { a, b -> a + b })
+            .toString() == 'abc'
+    ```
