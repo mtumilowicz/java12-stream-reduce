@@ -8,7 +8,8 @@ class ReduceTests extends Specification {
 
         expect:
         ints.stream().reduce(0, { a, b -> a + b }) == 55
-        ints.stream().parallel().reduce(20, { a, b -> a + b }) != 75
+        ints.stream().reduce(20, { a, b -> a + b }) == 75 // possibly true, but not guarantee by specification
+        ints.stream().parallel().reduce(20, { a, b -> a + b }) != 75 // 20 is not an identity value
     }
 
     def "combiner example"() {
