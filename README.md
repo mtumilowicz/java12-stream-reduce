@@ -48,14 +48,18 @@ stream pipeline
             result = accumulator.apply(result, element)
         return result;
         ```
-    * identity value must be an identity for the accumulator function. This means that for all t,
-        `accumulator.apply(identity, t) is equal to t` for all `t`
+    * identity value must be an identity for the accumulator function
+        ```
+        accumulator.apply(identity, t) is equal to t, for all t
+        ```
 1. `<U> U reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner);`
     * note that with other two implementations of `reduce` there is no possibility to return other type
     than stream type (eg. if you are reducing stream of integers with other two implementations the reduced value
      is also an integer)
     * combiner function must be compatible with the accumulator function
-        `combiner.apply(u, accumulator.apply(identity, t)) == accumulator.apply(u, t)` for all `u` and `t`
+        ```
+        combiner.apply(u, accumulator.apply(identity, t)) == accumulator.apply(u, t) for all u and t
+        ```
     * many reductions using this form can be represented more simply by an explicit combination of `map` 
     and `reduce` operations
         ```
