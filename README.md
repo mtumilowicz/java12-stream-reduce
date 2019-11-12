@@ -6,24 +6,22 @@
 
 ## preface
 ### Associativity
-* an operator or function op is associative if the following holds:
+* an operator or function `op` is associative if the following holds:
     * `(a op b) op c == a op (b op c)`
-the importance of this to parallel evaluation can be seen if we expand this to four terms:
+* the importance of this to parallel evaluation can be seen if we expand this to four terms:
      * `a op b op c op d == (a op b) op (c op d)`
      * so we can evaluate `(a op b)` in parallel with `(c op d)`, and then invoke op on the results
-* examples of associative operations include numeric addition, min, and max, and string concatenation.
+* example: numeric addition, min, and max, and string concatenation
 
 ### Non-interference
-* for most data sources, preventing interference means ensuring that the data source is not modified at all during 
-the execution of the stream pipeline
+* means ensuring that the data source is not modified at all during the execution of the stream pipeline
 * the notable exception to this are streams whose sources are concurrent collections, which are specifically 
 designed to handle concurrent modification
 
 ### statelessness
-* a stateful lambda (or other object implementing the appropriate functional interface) is one whose result depends 
-on any state which might change during the execution of the stream pipeline
-* the best approach is to avoid stateful behavioral parameters to stream operations entirely; there is usually a way 
-to restructure the stream pipeline to avoid statefulness
+* a stateful lambda is one whose result depends on any state which might change during the execution of the 
+stream pipeline
+* the best approach is to avoid stateful behavioral parameters to stream operations entirely
 
 ## reduce
 * accumulator have to be an **associative**, **non-interfering**, **stateless** function for combining two values
