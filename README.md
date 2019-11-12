@@ -5,7 +5,7 @@
 * https://stackoverflow.com/questions/24308146/why-is-a-combiner-needed-for-reduce-method-that-converts-type-in-java-8
 
 ## preface
-### Associativity
+### associativity
 * an operator or function `op` is associative if the following holds:
     * `(a op b) op c == a op (b op c)`
 * the importance of this to parallel evaluation can be seen if we expand this to four terms:
@@ -13,7 +13,7 @@
      * so we can evaluate `(a op b)` in parallel with `(c op d)`, and then invoke op on the results
 * example: numeric addition, min, and max, and string concatenation
 
-### Non-interference
+### non-interference
 * means ensuring that the data source is not modified at all during the execution of the stream pipeline
 * the notable exception to this are streams whose sources are concurrent collections, which are specifically 
 designed to handle concurrent modification
